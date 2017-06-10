@@ -1,1 +1,22 @@
-// Empty css file for index page
+/*
+* CSS file index.html
+*/
+
+h1
+{
+	text-align: center;
+}
+
+#sidemenu
+{
+	float: left;
+	width: 250px;
+	max-width: 300px;
+}
+
+#d3
+{
+	margin-left: 250px;
+	height: 100%;
+	background-color: blue;
+}
