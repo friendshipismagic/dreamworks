@@ -5,8 +5,26 @@
   <title>Dreamworks</title>
   <link rel="stylesheet" href="css/index.css">
   <script src="js/index.js"></script>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/bubble_chart.css">
 </head>
 <body>
-  <!-- put content here -->
+  <div class="container">
+    <h1>Pour faire de jolies bubbles</h1>
+    <div id="toolbar">
+      <a href="#" id="all" class="button active">All Grants</a>
+      <a href="#" id="year" class="button">Grants By Year</a>
+    </div>
+    <div id="vis"></div>
+
+    <div class="footer">
+      <p>Hi ! This is the footer !</p>
+      <p><a href="http://www.dreambank.net/">Dream Bank</a></p>
+    </div>
+  </div>
+
+  <script src="lib/d3.js"></script>
+  <script src="lib/tooltip.js"></script>
+  <script src="lib/bubble_chart.js"></script>
 </body>
 </html>
