@@ -1,3 +1,9 @@
+//Charte graphique
+// bleu clair #5894E3
+// bleu foncé #2238CC
+// jaune mimosa #F2CC0C
+// police #111B63
+
 
 /* bubbleChart creation function. Returns a function that will
  * instantiate a new bubble chart given a DOM element to display
@@ -9,7 +15,7 @@
  */
 function bubbleChart() {
   //Test de l'arc
-
+/*
   var canvas = d3.select("body")
     .append("svg")
     .attr("width", window.innerWidth)
@@ -18,7 +24,7 @@ function bubbleChart() {
   var r= Math.min(window.innerWidth/3, window.innerHeight/3);
   var p=Math.PI*2;
   var group= canvas.append("g")
-    .attr("transform", "translate(100,100)");
+    .attr("transform", "translate(500,80)");
 
   var arc = d3.svg.arc()
     .innerRadius(r-2)
@@ -28,7 +34,7 @@ function bubbleChart() {
 
   group.append("path")
     .attr("d",arc);
-
+*/
 
 
   // Constants for sizing
@@ -55,7 +61,8 @@ function bubbleChart() {
   };
 
   // Used when setting up force and moving around nodes
-  var damper = 0.102;
+  var damper = 0.102;   /////////////////////////////PERMET DE SÉLÉCTIONNER LA PROXIMITÉ DES BUBBLES
+  /////// ET LA RAPIDITÉ DE CONVERGENCE
 
   // These will be set in create_nodes and create_vis
   var svg = null;
@@ -72,7 +79,7 @@ function bubbleChart() {
   dimensions.
   */
   function charge(d) {
-    return -Math.pow(d.radius, 2.0) / 8;
+    return -Math.pow(d.radius, 2.0) / 8; ///////////JOUER SUR LE DÉNOMINATEUR POUR LA RÉPULSION DES BUBBLES
   }
 
   /*Here we create a force layout and configure it to use the charge function
@@ -90,7 +97,7 @@ function bubbleChart() {
   // Nice looking colors - no reason to buck the trend
   var fillColor = d3.scale.ordinal()
     .domain(['low', 'medium', 'high'])
-    .range(['#d84b2a', '#beccae', '#7aa25c']);
+    .range(['#F2CC0C', '#2238CC', '#5894E3']);
 
   // Sizes bubbles based on their area instead of raw radius
   var radiusScale = d3.scale.pow()
