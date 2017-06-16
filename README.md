@@ -3,6 +3,7 @@
 Data visualisation practice project @Telecom ParisTech.
 
 Web interface is available [here](https://friendshipismagic.github.io/dreamworks/frontend/)
+Project report is available [here](https://www.overleaf.com/read/nzcdfvxnwqrt)
 
 # Participants
 
