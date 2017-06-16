@@ -28,7 +28,7 @@ def scrape_dataset(name):
         "rd_table": 1,
         "ss": 100
     });
-    dream_list = BS(urlopen("http://dreambank.net/search.cgi?" + params))
+    dream_list = BS(urlopen("http://dreambank.net/search.cgi?" + params), "html.parser")
 
     dream_list = [o['value'] for o in dream_list.find("select", {"name": "d"})
                                                 .find_all("option")]
@@ -44,7 +44,7 @@ def scrape_dataset(name):
         ("countwords", 1)
     ])
     data += "&" + ("&".join(["d=" + n for n in dream_list]))
-    dreams_tags = BS(urlopen("http://dreambank.net/show.cgi", str.encode(data)))
+    dreams_tags = BS(urlopen("http://dreambank.net/show.cgi", str.encode(data)), "html.parser")
 
     dreams = []
     for tag in dreams_tags.find_all("input", {"type": "checkbox", "name": "d"}):
