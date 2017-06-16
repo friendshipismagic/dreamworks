@@ -5,11 +5,13 @@ from urllib.request import urlopen
 from urllib.parse import urlencode
 from bs4 import BeautifulSoup as BS
 
-# Fetch dataset list
-dataset_list = BS(urlopen("http://dreambank.net/search.cgi"), "html.parser")
-dataset_list = [o['value'] for o in dataset_list
-                                    .find("select", {"id": "select:series"})
-                                    .find_all("option")]
+def scrape_dataset_list():
+    # Fetch dataset list
+    dataset_list = BS(urlopen("http://dreambank.net/search.cgi"), "html.parser")
+    dataset_list = [o['value'] for o in dataset_list
+                                        .find("select", {"id": "select:series"})
+                                        .find_all("option")]
+    return dataset_list
 
 def scrape_dataset(name):
     # Fetch dream list
