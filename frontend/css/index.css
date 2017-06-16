@@ -32,7 +32,7 @@ h1, h2 {
 }
 
 #sidemenu {
-	z-index: 1000;
+    z-index: 1000;
     position: fixed;
     left: 250px;
     width: 250px;
@@ -62,11 +62,11 @@ h1, h2 {
     background: #FFF
 }
 
-#sidebarButton
-{
-	float: right;
+#sidebarButton {
+    float: right;
     width: 30px;
     height: 30px;
     background: #FAFAFF;
     border: none;
 }
+
