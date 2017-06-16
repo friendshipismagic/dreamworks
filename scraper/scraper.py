@@ -30,3 +30,22 @@ def scrape_dataset(name):
     dream_list = [o['value'] for o in dream_list.find("select", {"name": "d"})
                                                 .find_all("option")]
 
+    # Craft params for the final request
+    data = urlencode([
+        ("series", name),
+        ("mode", "AND"),
+        ("query", "."),
+        ("cs", ""),
+        ("full_search_query", params),
+        ("blacklist", ""),
+        ("countwords", 1)
+    ])
+    data += "&" + ("&".join(["d=" + n for n in dream_list]))
+    dreams_tags = BS(urlopen("http://dreambank.net/show.cgi", str.encode(data)))
+
+    dreams = []
+    for tag in dreams_tags.find_all("input", {"type": "checkbox", "name": "d"}):
+        L = [i for i in tag.next_siblings]
+        dreams.append(L[-2])
+    return dreams
+
