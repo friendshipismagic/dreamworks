@@ -8,12 +8,10 @@ import re
 
 def scrape_dataset_list():
     # Fetch dataset list
-    dataset_list = BS(urlopen("http://dreambank.net/search.cgi"), "html.parser")
-    # Regexp to remove dream count from title
-    dataset_list = {o['value']: re.sub(r" \[n=[0-9]+\]$", "", o.text)
-                    for o in dataset_list
-                             .find("select", {"id": "select:series"})
-                             .find_all("option")}
+    dataset_list = BS(urlopen("http://dreambank.net/grid.cgi"), "html.parser")
+    dataset_list = {tr[5].find("input")['value']: { "sex": tr[7].text, "title": tr[1].text }
+                    for tr in [[i for i in e.children]
+                               for e in dataset_list.find_all("tr", {"align": "center"})]}
     return dataset_list
 
 def scrape_dataset(name):
