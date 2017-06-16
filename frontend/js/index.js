@@ -1,6 +1,6 @@
 /*
-	Javascript for the index.html file
-*/
+ * Javascript for the index.html file
+ */
 
 // Side bar animation
 $("#sidebarButton").click(function(e) {
