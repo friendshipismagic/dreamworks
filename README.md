@@ -2,6 +2,8 @@
 
 Data visualisation practice project @Telecom ParisTech.
 
+Web interface is available [here](https://friendshipismagic.github.io/dreamworks/frontend/)
+
 # Participants
 
 - Alexis Bauvin

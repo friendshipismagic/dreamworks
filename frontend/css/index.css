@@ -1,0 +1,72 @@
+/*
+* CSS file index.html
+* Side bar inspired by https://github.com/BlackrockDigital/startbootstrap-simple-sidebar
+*/
+
+html{
+    background: #FAFAFF;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+h1, h2 {
+	text-align: center;
+}
+
+#pagetitle {
+    background: #FAFAFF;
+}
+
+#wrapper {
+    padding-left: 250px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled{
+    padding-left: 40px;
+}
+
+#sidemenu {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 250px;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #FAFAFF;
+    border-right: thick double #dedef0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidemenu {
+    width: 40px;
+}
+
+#wrapper.toggled #sidemenu h2 {
+    word-wrap: break-word;
+    padding: 10px;
+}
+
+#d3 {
+    position: absolute;
+    padding: 15px;
+    background: #FFF
+}
+
+#sidebarButton {
+    float: right;
+    width: 30px;
+    height: 30px;
+    background: #FAFAFF;
+    border: none;
+}
+
