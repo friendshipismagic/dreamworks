@@ -54,8 +54,9 @@ def scrape_dataset(name):
         m = (
             re.search(r"\(([^/]+)/([^/]+)/([^/]+)\)", L[2]),    # MM/DD/YY
             re.search(r"\(([^\-]+)-([^\-]+)-([^\-]+)\)", L[2]), # YY-MM-DD
-            re.search(r"\(\s*([0-9]+)\??\)", L[2]),             # YYYY
+            re.search(r"\(\s*([0-9]+)\??(/\d{4})?(\s*\(\w+\))?\)", L[2]), # YYYY
             re.search(r"\((\w+) *(\d+)?, (\d+)\)", L[2]),       # Month DD, YYYY
+            re.search(r"\([FM], age (\d+)\)", L[2])             # Gives age of the dreamer ...
         )
 
         months = [
@@ -75,11 +76,11 @@ def scrape_dataset(name):
                 "d": m[3].group(2)
             }
             if date["d"] is None: date["d"] = "01"
+        elif m[4] is not None:
+            date = { "y": str(int(m[4].group(1)) + 1998), "m": "01", "d": "01" }
         else:
             print("Unrecognized date " + L[2])
             date = { "y": "0000", "m": "01", "d": "01" }
-
-        print(L[2])
 
         if date['y'] == "??": date['y'] = "01"
         if date['m'] == "??": date['m'] = "01"
