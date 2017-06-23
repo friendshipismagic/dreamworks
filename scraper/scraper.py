@@ -110,7 +110,7 @@ for name in to_scrape:
     dataset[name]['dreams'] = dreams
 
 # Save to CSV
-with open("frontend/data.csv", "w") as csvfile:
+with open("../frontend/data.csv", "w") as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=[
         "text", "date", "gender", "dataset", "title"
     ])
