@@ -4,7 +4,7 @@
 from urllib.request import urlopen
 from urllib.parse import urlencode
 from bs4 import BeautifulSoup as BS
-import re
+import re, csv
 
 def scrape_dataset_list():
     # Fetch dataset list
@@ -94,7 +94,6 @@ def scrape_dataset(name):
             "text": L[-2],
             "date": date
         })
-        dreams.append((L[-2], L[2]))
     return dreams
 
 # Scrape dataset list
@@ -109,4 +108,29 @@ to_scrape = [
 for name in to_scrape:
     dreams = scrape_dataset(name)
     dataset[name]['dreams'] = dreams
+
+# Save to CSV
+with open("dataset.csv", "w") as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=[
+        "id", "text", "date", "gender", "dataset", "title"
+    ])
+
+    writer.writeheader()
+    id = 0
+    for name in to_scrape:
+        data = dataset[name]
+        for dream in data['dreams']:
+            writer.writerow({
+                "id": id,
+                "text": dream["text"],
+                "date": "{}-{}-{}".format(
+                    dream["date"]["y"],
+                    dream["date"]["m"],
+                    dream["date"]["d"]
+                ),
+                "gender": data["sex"],
+                "dataset": name,
+                "title": data["title"]
+            })
+            id += 1
 
