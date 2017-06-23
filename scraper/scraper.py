@@ -112,16 +112,14 @@ for name in to_scrape:
 # Save to CSV
 with open("dataset.csv", "w") as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=[
-        "id", "text", "date", "gender", "dataset", "title"
+        "text", "date", "gender", "dataset", "title"
     ])
 
     writer.writeheader()
-    id = 0
     for name in to_scrape:
         data = dataset[name]
         for dream in data['dreams']:
             writer.writerow({
-                "id": id,
                 "text": dream["text"],
                 "date": "{}-{}-{}".format(
                     dream["date"]["y"],
@@ -132,5 +130,4 @@ with open("dataset.csv", "w") as csvfile:
                 "dataset": name,
                 "title": data["title"]
             })
-            id += 1
 
