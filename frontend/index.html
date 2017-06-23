@@ -1,42 +1,62 @@
 <!doctype html>
 <html lang="fr">
 
-<head>
-  <meta charset="utf-8">
-  <title>Dreamworks</title>
-  <meta name="description" content="Data visualisation practice project @Telecom ParisTech.">
-  <meta name="author" content="Alexis Bauvin, Ariane Robineau, Clément Decoodt, Jean Lepeudry, Léa Saviot">
-  <link rel="stylesheet" href="css/index.css">
+	<head>
+		<meta charset="utf-8">
+		<title>Dreamworks</title>
 
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-  <!-- End Bootstrap -->
+		<meta name="description" content="Data visualisation practice project @Telecom ParisTech.">
+		<meta name="author" content="Alexis Bauvin, Ariane Robineau, Clément Decoodt, Jean Lepeudry, Léa Saviot">
 
-  
-</head>
+		<!-- Central visualisation -->
+		<link rel="stylesheet" href="css/bubble_chart.css">
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/index.css">
+		<!-- End Central visualisation -->
 
-<body>
-	<div id="pagetitle">
-		<h1>Dreamworks &#8226 Visualization of a dream bank</h1>
-	</div>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 
-  <div id="wrapper">
-  	<div id="sidemenu">
-      <button id="sidebarButton" type="button"><</button>
-  		<h2>FILTER</h2>
-  	</div>
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+		<!-- End Bootstrap -->
 
-  	<div id="d3">
-  		This main window will contain the visualization
-  	</div>
-  </div>
+	</head>
 
-  <script src="js/index.js"></script>
+	<body>
+		<div class="container">
+			<div id="pagetitle">
+				<h1>Dreamworks &#8226 Visualization of a dream bank</h1>
+			</div>
 
-</body>
+			<div id="wrapper">
+				<div id="sidemenu">
+					<button id="sidebarButton" type="button"><</button>
+					<table>
+						<h2>FILTER</h2>
+						<tr><th><a href="#" id="all" class="button active">Toutes catégories</a></th></tr>
+						<tr><th><a href="#" id="year" class="button">Catégories classables (par année)</a></th></tr>
+					</table>
+				</div>
+
+				<div id="d3">
+					<div id="vis"></div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p>Hi ! This is the footer !</p>
+				<p><a href="http://www.dreambank.net/">Dream Bank</a></p>
+			</div>
+		</div>
+
+		<script src="js/index.js"></script>
+		<script src="js/tooltip.js"></script>
+		<script src="js/bubble_chart.js"></script>
+
+	</body>
 
 
 
