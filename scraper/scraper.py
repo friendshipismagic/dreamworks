@@ -97,3 +97,16 @@ def scrape_dataset(name):
         dreams.append((L[-2], L[2]))
     return dreams
 
+# Scrape dataset list
+dataset = scrape_dataset_list()
+
+# Scrape interesting datasets
+to_scrape = [
+    "angie", "bea2", "chris", "chuck", "edna", "emmas_husband", "jasmine1",
+    "jeff", "mark", "midwest_teens-f", "midwest_teens-m", "phil1",
+    "physiologist", "ringo", "vickie", "vietnam_vet", "wedding"
+]
+for name in to_scrape:
+    dreams = scrape_dataset(name)
+    dataset[name]['dreams'] = dreams
+
