@@ -3,20 +3,12 @@
 * Side bar inspired by https://github.com/BlackrockDigital/startbootstrap-simple-sidebar
 */
 
-html{
-    background: #FAFAFF;
-}
-
 body {
     overflow-x: hidden;
 }
 
 h1, h2 {
 	text-align: center;
-}
-
-#pagetitle {
-    background: #FAFAFF;
 }
 
 #wrapper {
@@ -39,7 +31,6 @@ h1, h2 {
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background: #FAFAFF;
     border-right: thick double #dedef0;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -59,7 +50,6 @@ h1, h2 {
 #d3 {
     position: absolute;
     padding: 15px;
-    background: #FFF
 }
 
 #sidebarButton {
