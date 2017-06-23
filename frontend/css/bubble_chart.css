@@ -44,6 +44,7 @@ a, a:visited, a:active {
 
 .tooltip {
 	position: absolute;
+  bottom: 0;
 	top: 100px;
 	left: 100px;
   -moz-border-radius:5px;
