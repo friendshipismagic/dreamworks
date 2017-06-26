@@ -40,6 +40,7 @@ function bubbleChart() {
   // Constants for sizing
   var width = 940;
   var height = 600;
+  var smallRadius = 4;
   var mediumRadius = 8;
 
   // tooltip for mouseover functionality
@@ -80,8 +81,6 @@ function bubbleChart() {
   dimensions.
   */
   function charge(d) {
-    //return -Math.pow(mediumRadius, 2.0) / 8;
-    //REMOVED
     return -Math.pow(d.radius, 2.0) / 8;
     ///////////JOUER SUR LE DÉNOMINATEUR POUR LA RÉPULSION DES BUBBLES
   }
@@ -102,6 +101,20 @@ function bubbleChart() {
   var fillColor = d3.scale.ordinal()
     .domain(['low', 'medium', 'high'])
     .range(['#F2CC0C', '#2238CC', '#5894E3']);
+
+  // Sizes bubbles based on their selected status
+  function radiusScale(d){
+    var button = d3.select('#maleButton');
+    if (!button.classed('active') && d.gender == "male"){
+      return smallRadius;
+    }
+    button = d3.select('#femaleButton');
+    if (!button.classed('active') && d.gender == "female"){
+      return smallRadius;
+    }
+
+    return mediumRadius;
+  }
 
   /*
    * This data manipulation function takes the raw data from
@@ -167,8 +180,6 @@ function bubbleChart() {
     // Bind nodes data to what will become DOM elements to represent them.
     bubbles = svg.selectAll('.bubble')
       .data(nodes);
-      //REMOVED 
-      //.data(nodes, function (d) { return d.id; });
 
     /*Create new circle elements each with class `bubble`.
     There will be one circle.bubble for each object in the nodes array.
@@ -187,7 +198,7 @@ function bubbleChart() {
     // correct radius
     bubbles.transition()
       .duration(2000)
-      .attr('r', function (d) { return d.radius; });
+      .attr('r', function (d) { return radiusScale(d); });
 
     // Set initial layout to single group.
     groupBubbles();
@@ -353,6 +364,13 @@ function bubbleChart() {
    */
   chart.selectNodes = function (categoryName, bool) {
    //TODO
+   force.on('tick', function (e) {
+      bubbles.each(moveToCenter(e.alpha))
+        .attr('r', function (d) { return radiusScale(d); })
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
    force.start();
   };
 
@@ -418,7 +436,7 @@ function setupButtons() {
       // Select or unselect the corresponding nodes
 
       // Set it as an active button
-      if(button.hasClass('active')){
+      if(button.classed('active')){
         button.classed('active', false);
         myBubbleChart.selectNodes(buttonId, false);
       } else {
@@ -451,7 +469,6 @@ function addCommas(nStr) {
 }
 
 // Load the data.
-//d3.csv('data/gates_money.csv', display);
 d3.csv('data.csv', display);
 
 // setup the buttons.
