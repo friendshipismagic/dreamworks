@@ -14,28 +14,6 @@
  *
  */
 function bubbleChart() {
-  //Test de l'arc
-/*
-  var canvas = d3.select("body")
-    .append("svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight);
-
-  var r= Math.min(window.innerWidth/3, window.innerHeight/3);
-  var p=Math.PI*2;
-  var group= canvas.append("g")
-    .attr("transform", "translate(500,80)");
-
-  var arc = d3.svg.arc()
-    .innerRadius(r-2)
-    .outerRadius(r)
-    .startAngle(2/p-1.5)
-    .endAngle(p-2/p-1.5);
-
-  group.append("path")
-    .attr("d",arc);
-*/
-
 
   // Constants for sizing
   var width = 940;
@@ -63,8 +41,7 @@ function bubbleChart() {
   };
 
   // Used when setting up force and moving around nodes
-  var damper = 0.102;   /////////////////////////////PERMET DE SÉLÉCTIONNER LA PROXIMITÉ DES BUBBLES
-  /////// ET LA RAPIDITÉ DE CONVERGENCE
+  var damper = 0.102;
 
   // These will be set in create_nodes and create_vis
   var svg = null;
@@ -82,7 +59,6 @@ function bubbleChart() {
   */
   function charge(d) {
     return -Math.pow(d.radius, 2.0) / 8;
-    ///////////JOUER SUR LE DÉNOMINATEUR POUR LA RÉPULSION DES BUBBLES
   }
 
   /*Here we create a force layout and configure it to use the charge function
@@ -105,16 +81,23 @@ function bubbleChart() {
   // Sizes bubbles based on their selected status
   function radiusScale(d){
     var button = d3.select('#maleButton');
-    if (!button.classed('active') && d.gender == "male"){
-      return smallRadius;
+    if (button.classed('selecting') && d.gender == "male"){
+      return mediumRadius;
     }
     button = d3.select('#femaleButton');
-    if (!button.classed('active') && d.gender == "female"){
-      return smallRadius;
+    if (button.classed('selecting') && d.gender == "female"){
+      return mediumRadius;
     }
-
-    return mediumRadius;
+    return smallRadius;
   }
+
+  // Resize a bubble according to selectors
+  function resizeBubble() {
+    return function (d) {
+      d.radius = radiusScale(d);
+    };
+  }
+
 
   /*
    * This data manipulation function takes the raw data from
@@ -218,7 +201,6 @@ function bubbleChart() {
         .attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; });
     });
-
     force.start();
   }
 
@@ -362,13 +344,12 @@ function bubbleChart() {
    * node categories to be less highleted
    * categoryName is expected to be a string and either 'man', 'woman' or 'unknown'.
    */
-  chart.selectNodes = function (categoryName, bool) {
-   //TODO
-   force.on('tick', function (e) {
-      bubbles.each(moveToCenter(e.alpha))
-        .attr('r', function (d) { return radiusScale(d); })
-        .attr('cx', function (d) { return d.x; })
-        .attr('cy', function (d) { return d.y; });
+  chart.selectNodes = function () {
+
+    setTimeout(groupBubbles, 100);
+    force.on('tick', function (e) {
+      bubbles.each(resizeBubble())
+        .attr('r', function (d) { return d.radius; })
     });
 
    force.start();
@@ -385,7 +366,6 @@ function bubbleChart() {
  */
 
 var myBubbleChart = bubbleChart();
-
 /*
  * Function called once data is loaded from CSV.
  * Calls bubble chart function to display inside #vis div.
@@ -430,19 +410,15 @@ function setupButtons() {
       // Find the button just clicked
       var button = d3.select(this);
 
-      // Get the id of the button
-      var buttonId = button.attr('id');
+      // Set it as an active button
+      if(button.classed('selecting')){
+        button.classed('selecting', false);
+      } else {
+        button.classed('selecting', true);
+      }
 
       // Select or unselect the corresponding nodes
-
-      // Set it as an active button
-      if(button.classed('active')){
-        button.classed('active', false);
-        myBubbleChart.selectNodes(buttonId, false);
-      } else {
-        button.classed('active', true);
-        myBubbleChart.selectNodes(buttonId, true);
-      }
+      myBubbleChart.selectNodes();
     });
 }
 
