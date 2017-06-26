@@ -345,11 +345,12 @@ function bubbleChart() {
    * categoryName is expected to be a string and either 'man', 'woman' or 'unknown'.
    */
   chart.selectNodes = function () {
-
-    setTimeout(groupBubbles, 100);
+    bubbles.each(resizeBubble())
+          .attr('r', function (d) { return d.radius; });
     force.on('tick', function (e) {
-      bubbles.each(resizeBubble())
-        .attr('r', function (d) { return d.radius; })
+      bubbles.each(moveToCenter(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
     });
 
    force.start();
