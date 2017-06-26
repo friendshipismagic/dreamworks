@@ -40,7 +40,7 @@ function bubbleChart() {
   // Constants for sizing
   var width = 940;
   var height = 600;
-  var mediumRadius = 8;
+  var mediumRadius = 20;
 
   // tooltip for mouseover functionality
   var tooltip = floatingTooltip('gates_tooltip', 240);
@@ -103,6 +103,11 @@ function bubbleChart() {
     .domain(['low', 'medium', 'high'])
     .range(['#F2CC0C', '#2238CC', '#5894E3']);
 
+  // Sizes bubbles based on their area instead of raw radius
+  var radiusScale = d3.scale.pow()
+    .exponent(0.5)
+    .range([2, 85]);
+
   /*
    * This data manipulation function takes the raw data from
    * the CSV file and converts it into an array of node objects.
@@ -122,19 +127,23 @@ function bubbleChart() {
     */
     var myNodes = rawData.map(function (d) {
       return {
-        radius: mediumRadius,
-        text: d.text,
-        date: d.date,
-        gender: d.gender,
-        dataset: d.dataset,
-        title: d.title,
+        id: d.id,
+        //radius: mediumRadius;
+        radius: radiusScale(3000000),
+        //REMOVED 
+        //radius: radiusScale(+mediumRadius),
+        value: d.total_amount,
+        name: d.grant_title,
+        org: d.organization,
+        group: d.group,
+        year: d.start_year,
         x: Math.random() * 900,
         y: Math.random() * 800
       };
     });
 
     // sort them to prevent occlusion of smaller nodes.
-    myNodes.sort(function (a, b) { return b.radius - a.radius; });
+    myNodes.sort(function (a, b) { return b.value - a.value; });
 
     return myNodes;
   }
@@ -153,6 +162,12 @@ function bubbleChart() {
    * a d3 loading function like d3.csv.
    */
   var chart = function chart(selector, rawData) {
+    /*Use the max total_amount in the data as the max in the scale's domain
+    note we have to ensure the total_amount is a number by converting it
+    with `+`.
+    */
+    var maxAmount = d3.max(rawData, function (d) { return +d.total_amount; });
+    radiusScale.domain([0, maxAmount]);
 
     nodes = createNodes(rawData);
     // Set the force's nodes to our newly created nodes array.
@@ -177,7 +192,9 @@ function bubbleChart() {
     bubbles.enter().append('circle')
       .classed('bubble', true)
       .attr('r', 0)
-      .attr('fill', function (d) { return fillColor('medium'); })
+      //.attr('fill', function (d) { return fillColor('medium'); })
+      // REMOVED
+      .attr('fill', function (d) { return fillColor(d.group); })
       .attr('stroke', function (d) { return d3.rgb(fillColor('medium')).darker(); })
       .attr('stroke-width', 2)
       .on('mouseover', showDetail)
@@ -187,6 +204,8 @@ function bubbleChart() {
     // correct radius
     bubbles.transition()
       .duration(2000)
+      //.attr('r', mediumRadius);
+      //REMOVED 
       .attr('r', function (d) { return d.radius; });
 
     // Set initial layout to single group.
@@ -266,10 +285,9 @@ function bubbleChart() {
    */
   function moveToYears(alpha) {
     return function (d) {
-      //TODO
-      /*var target = yearCenters[d.year];
+      var target = yearCenters[d.year];
       d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
-      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;*/
+      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
     };
   }
 
@@ -308,13 +326,13 @@ function bubbleChart() {
     d3.select(this).attr('stroke', 'black');
 
     var content = '<span class="name">Title: </span><span class="value">' +
-                  d.title +
+                  d.name +
                   '</span><br/>' +
-                  '<span class="name">Dataset: </span><span class="value">' +
-                  d.dataset +
+                  '<span class="name">Amount: </span><span class="value">$' +
+                  addCommas(d.value) +
                   '</span><br/>' +
-                  '<span class="name">Date: </span><span class="value">' +
-                  d.date +
+                  '<span class="name">Year: </span><span class="value">' +
+                  d.year +
                   '</span>';
     tooltip.showTooltip(content, d3.event);
   }
@@ -325,7 +343,7 @@ function bubbleChart() {
   function hideDetail(d) {
     // reset outline
     d3.select(this)
-      .attr('stroke', d3.rgb(fillColor('medium')).darker());
+      .attr('stroke', d3.rgb(fillColor(d.group)).darker());
 
     tooltip.hideTooltip();
   }
@@ -451,8 +469,8 @@ function addCommas(nStr) {
 }
 
 // Load the data.
-//d3.csv('data/gates_money.csv', display);
-d3.csv('data.csv', display);
+d3.csv('data/gates_money.csv', display);
+//d3.csv('data.csv', display);
 
 // setup the buttons.
 setupButtons();
