@@ -13,6 +13,11 @@
  * https://bost.ocks.org/mike/chart/
  *
  */
+
+
+// State of the view: grouped view, or ordered by years
+var currentView;
+
 function bubbleChart() {
 
   // Constants for sizing
@@ -21,21 +26,15 @@ function bubbleChart() {
   var smallRadius = 2;
   var mediumRadius = 8;
 
-  // tooltip for mouseover functionality
+  // Tooltip for mouseover functionality
   var tooltip = floatingTooltip('gates_tooltip', 240);
+
+  // View mode
+  var groupedView = "all";
+  var yearOrderedView = "year";
 
   // Locations to move bubbles towards, in grouped view mode.
   var center = { x: width / 2, y: height / 2 };
-
-  // X locations of the year titles.
-  var yearsTitleX = {
-    1900: 90,
-    1950: 250,
-    1970: 420,
-    1990: 495,
-    2000: 595,
-    2010: 730
-  };
 
   // Used when setting up force and moving around nodes
   var damper = 0.102;
@@ -197,6 +196,7 @@ function bubbleChart() {
       .attr('r', function (d) { return radiusScale(d); });
 
     // Set initial layout to single group.
+    currentView = groupedView;
     groupBubbles();
   };
 
@@ -207,8 +207,6 @@ function bubbleChart() {
    * center of the visualization.
    */
   function groupBubbles() {
-    hideYears();
-
     force.on('tick', function (e) {
       bubbles.each(moveToCenter(e.alpha))
         .attr('cx', function (d) { return d.x; })
@@ -240,13 +238,10 @@ function bubbleChart() {
 
   /*
    * Sets visualization in "split by year mode".
-   * The year labels are shown and the force layout
-   * tick function is set to move nodes to the
+   * The force layout tick function is set to move nodes to the
    * yearCenter of their data's year.
    */
   function splitBubbles() {
-    showYears();
-
     force.on('tick', function (e) {
       bubbles.each(moveToYears(e.alpha))
         .attr('cx', function (d) { return d.x; })
@@ -284,32 +279,6 @@ function bubbleChart() {
       d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
     };
   }
-
-  /*
-   * Hides Year title displays.
-   */
-  function hideYears() {
-    svg.selectAll('.year').remove();
-  }
-
-  /*
-   * Shows Year title displays.
-   */
-  function showYears() {
-    // Another way to do this would be to create
-    // the year texts once and then just hide them.
-    var yearsData = d3.keys(yearsTitleX);
-    var years = svg.selectAll('.year')
-      .data(yearsData);
-
-    years.enter().append('text')
-      .attr('class', 'year')
-      .attr('x', function (d) { return yearsTitleX[d]; })
-      .attr('y', 40)
-      .attr('text-anchor', 'middle')
-      .text(function (d) { return d; });
-  }
-
 
   /*
    * Function called on mouseover to display the
@@ -366,13 +335,11 @@ function bubbleChart() {
   chart.selectNodes = function () {
     bubbles.each(resizeBubble())
           .attr('r', function (d) { return d.radius; });
-    force.on('tick', function (e) {
-      bubbles.each(moveToCenter(e.alpha))
-        .attr('cx', function (d) { return d.x; })
-        .attr('cy', function (d) { return d.y; });
-    });
 
-   force.start();
+    if(currentView == yearOrderedView)
+      splitBubbles();
+    else
+      groupBubbles();
   };
 
 
@@ -420,6 +387,8 @@ function setupButtons() {
 
       // Toggle the bubble chart based on
       // the currently clicked button.
+
+      currentView = buttonId;
       myBubbleChart.toggleDisplay(buttonId);
     });
 
