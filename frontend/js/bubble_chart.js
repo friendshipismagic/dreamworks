@@ -18,7 +18,7 @@ function bubbleChart() {
   // Constants for sizing
   var width = 940;
   var height = 600;
-  var smallRadius = 4;
+  var smallRadius = 2;
   var mediumRadius = 8;
 
   // tooltip for mouseover functionality
@@ -80,20 +80,33 @@ function bubbleChart() {
 
   // Sizes bubbles based on their selected status
   function radiusScale(d){
-    var dataGender = d.gender;
-    var dataDataset = d.dataset;
+    var dreamData = d;
     var resultRadius = mediumRadius;
     var currentButton;
+    // Verify that the gender and dataset are selected
     var buttons = d3.selectAll('.selectButton')
         .each(function(d) {
             currentButton = d3.select(this);
             if (!currentButton.classed("selecting")){
               var buttonID = currentButton.attr('id');
-              if (dataGender == buttonID || dataDataset == buttonID){
+              if (dreamData.gender == buttonID || dreamData.dataset == buttonID){
                 resultRadius = smallRadius;
               }
             }
          });
+    // Verify that the age and date are within the range
+    //TODO: put one input only to set the range so that the max is not onferior to the min
+    var ageRange = d3.select('#ageMin');
+    if(dreamData.age<ageRange.value) resultRadius = smallRadius;
+    ageRange = d3.select('#ageMax');
+    if(dreamData.age>ageRange.value) resultRadius = smallRadius;
+
+    var dateRange = d3.select('#yearMin');
+    dreamYear = +dreamData.date.substring(0, 4);
+    if(dreamYear<dateRange.value) resultRadius = smallRadius;
+    dateRange = d3.select('#yearMax');
+    if(dreamYear>dateRange.value) resultRadius = smallRadius;
+
     return resultRadius;
   }
 
@@ -429,6 +442,12 @@ function setupButtons() {
       // Select or unselect the corresponding nodes
       myBubbleChart.selectNodes();
     });
+
+    d3.select(".inputRange").on("input", function() {
+      // Select or unselect the corresponding nodes
+      console.log("boup");
+      myBubbleChart.selectNodes();
+  });
 }
 
 
