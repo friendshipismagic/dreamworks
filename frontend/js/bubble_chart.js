@@ -24,20 +24,17 @@ function bubbleChart() {
   // tooltip for mouseover functionality
   var tooltip = floatingTooltip('gates_tooltip', 240);
 
-  // Locations to move bubbles towards, depending on which view mode is selected.
+  // Locations to move bubbles towards, in grouped view mode.
   var center = { x: width / 2, y: height / 2 };
-
-  var yearCenters = {
-    2008: { x: width / 3, y: height / 2 },
-    2009: { x: width / 2, y: height / 2 },
-    2010: { x: 2 * width / 3, y: height / 2 }
-  };
 
   // X locations of the year titles.
   var yearsTitleX = {
-    2008: 160,
-    2009: width / 2,
-    2010: width - 160
+    1900: 90,
+    1950: 250,
+    1970: 420,
+    1990: 495,
+    2000: 595,
+    2010: 730
   };
 
   // Used when setting up force and moving around nodes
@@ -273,12 +270,18 @@ function bubbleChart() {
    * its destination, and so allows other forces like the
    * node's charge force to also impact final location.
    */
+
   function moveToYears(alpha) {
     return function (d) {
-      //TODO
-      /*var target = yearCenters[d.year];
-      d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
-      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;*/
+      var yeard = +d.date.substring(0, 4);
+      // Custom function fitted to the view
+      // 1890 and 2020 are rough extrema for the years range of our data
+      // 230 and 4/9 are ad hoc parameters
+      var targetX = 230 + (yeard-1890)/(2020-1890) * width * 4/9;
+      var targetY = height/2;
+
+      d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
     };
   }
 
@@ -440,7 +443,6 @@ function setupButtons() {
       myBubbleChart.selectNodes();
     });
 
-    //TODO: make this compact
     d3.select('#yearMin')
     .on("input", function() {
           // Select or unselect the corresponding nodes
@@ -451,15 +453,6 @@ function setupButtons() {
           // Select or unselect the corresponding nodes
             myBubbleChart.selectNodes();
     });
-    /*d3.selectAll(".inputRange")
-      .each(function(){
-          d3.select(this)
-          .on("input", function() {
-          // Select or unselect the corresponding nodes
-            console.log("boup");
-            myBubbleChart.selectNodes();
-          });
-      });*/
 }
 
 
