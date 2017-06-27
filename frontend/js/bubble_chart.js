@@ -96,16 +96,13 @@ function bubbleChart() {
          });
     // Verify that the age and date are within the range
     //TODO: put one input only to set the range so that the max is not onferior to the min
-    var ageRange = d3.select('#ageMin');
-    if(dreamData.age<ageRange.value) resultRadius = smallRadius;
-    ageRange = d3.select('#ageMax');
-    if(dreamData.age>ageRange.value) resultRadius = smallRadius;
 
-    var dateRange = d3.select('#yearMin');
+    var dateRange = d3.select('#yearMin').node().value;
     dreamYear = +dreamData.date.substring(0, 4);
-    if(dreamYear<dateRange.value) resultRadius = smallRadius;
-    dateRange = d3.select('#yearMax');
-    if(dreamYear>dateRange.value) resultRadius = smallRadius;
+    if(dreamYear<dateRange) resultRadius = smallRadius;
+        
+    dateRange = d3.select('#yearMax').node().value;
+    if(dreamYear>dateRange) resultRadius = smallRadius;
 
     return resultRadius;
   }
@@ -443,11 +440,26 @@ function setupButtons() {
       myBubbleChart.selectNodes();
     });
 
-    d3.select(".inputRange").on("input", function() {
-      // Select or unselect the corresponding nodes
-      console.log("boup");
-      myBubbleChart.selectNodes();
-  });
+    //TODO: make this compact
+    d3.select('#yearMin')
+    .on("input", function() {
+          // Select or unselect the corresponding nodes
+            myBubbleChart.selectNodes();
+    });
+    d3.select('#yearMax')
+    .on("input", function() {
+          // Select or unselect the corresponding nodes
+            myBubbleChart.selectNodes();
+    });
+    /*d3.selectAll(".inputRange")
+      .each(function(){
+          d3.select(this)
+          .on("input", function() {
+          // Select or unselect the corresponding nodes
+            console.log("boup");
+            myBubbleChart.selectNodes();
+          });
+      });*/
 }
 
 
