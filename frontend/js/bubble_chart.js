@@ -80,15 +80,21 @@ function bubbleChart() {
 
   // Sizes bubbles based on their selected status
   function radiusScale(d){
-    var button = d3.select('#maleButton');
-    if (button.classed('selecting') && d.gender == "male"){
-      return mediumRadius;
-    }
-    button = d3.select('#femaleButton');
-    if (button.classed('selecting') && d.gender == "female"){
-      return mediumRadius;
-    }
-    return smallRadius;
+    var dataGender = d.gender;
+    var dataDataset = d.dataset;
+    var resultRadius = mediumRadius;
+    var currentButton;
+    var buttons = d3.selectAll('.selectButton')
+        .each(function(d) {
+            currentButton = d3.select(this);
+            if (!currentButton.classed("selecting")){
+              var buttonID = currentButton.attr('id');
+              if (dataGender == buttonID || dataDataset == buttonID){
+                resultRadius = smallRadius;
+              }
+            }
+         });
+    return resultRadius;
   }
 
   // Resize a bubble according to selectors
@@ -414,8 +420,10 @@ function setupButtons() {
       // Set it as an active button
       if(button.classed('selecting')){
         button.classed('selecting', false);
+        button.classed('active', false);
       } else {
         button.classed('selecting', true);
+        button.classed('active', false);
       }
 
       // Select or unselect the corresponding nodes

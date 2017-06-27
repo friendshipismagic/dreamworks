@@ -1,4 +1,4 @@
-a, a:visited, a:active {
+a {
   color: #FFF;
 }
 
@@ -17,7 +17,7 @@ a, a:visited, a:active {
   text-decoration: none ;
 }
 
-.button.active {
+a:active, .button.active {
   background: #000;
   color: #5894E3;
 }
