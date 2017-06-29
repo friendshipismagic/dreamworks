@@ -60,12 +60,7 @@ p.left {
  * Nav Bar
  */
 
-a {
-	color: #333;
-	text-decoration: none;
-}
-
-.open {
+.side-open {
 	z-index: 100;
 	position: fixed;
 	top: 40px;
@@ -77,11 +72,16 @@ a {
 	transition: opacity 0.2s linear;
 }
 
-.open:hover {
+.side-open:hover {
 	opacity: 0.8;
 }
 
-.open span {
+.side-open a {
+	color: #333;
+	text-decoration: none;
+}
+
+.side-open span {
 	display: block;
 	float: left;
 	clear: both;
@@ -96,16 +96,16 @@ a {
 	transition: all 0.4s ease;
 }
 
-.open span:nth-child(1) {
+.side-open span:nth-child(1) {
 	margin-top: 10px;
 	z-index: 9;
 }
 
-.open span:nth-child(2) {
+.side-open span:nth-child(2) {
 	margin-top: 25px;
 }
 
-.open span:nth-child(3) {
+.side-open span:nth-child(3) {
 	margin-top: 40px;
 }
 
@@ -165,22 +165,22 @@ a {
 	line-height: 40px;
 }
 
-.oppenned .sub-menu {
+.sideOpenned .sub-menu {
 	opacity: 1;
 	height: 400px;
 	width: 400px;
 }
-.oppenned span:nth-child(2) {
+.sideOpenned span:nth-child(2) {
 	overflow: visible;
 }
-.oppenned span:nth-child(1), .oppenned span:nth-child(3) {
+.sideOpenned span:nth-child(1), .sideOpenned span:nth-child(3) {
 	z-index: 100;
 	transform: rotate(45deg);
 }
-.oppenned span:nth-child(1) {
+.sideOpenned span:nth-child(1) {
 	transform: rotate(45deg) translateY(12px) translateX(12px);
 }
-.oppenned span:nth-child(2) {
+.sideOpenned span:nth-child(2) {
 	height: 400px;
 	width: 400px;
 	right: -160px;
@@ -188,10 +188,10 @@ a {
 	border-radius: 50%;
 	background-color: rgba(38, 84, 133, 0.54);
 }
-.oppenned span:nth-child(3) {
+.sideOpenned span:nth-child(3) {
 	transform: rotate(-45deg) translateY(-10px) translateX(10px);
 }
-.oppenned li {
+.sideOpenned li {
 	margin-right: 168px;
 }
 

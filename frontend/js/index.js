@@ -3,15 +3,15 @@
  */
 
 $(document).ready(function() {
-	$(document).on('click', '.open', function(event){
-		$(this).addClass('oppenned');
+	$(document).on('click', '.side-open', function(event){
+		$(this).addClass('sideOpenned');
 		event.stopPropagation();
 	})
 	$(document).on('click', 'body', function(event) {
-		$('.open').removeClass('oppenned');
+		$('.side-open').removeClass('sideOpenned');
 	})
 	$(document).on('click', '.cls', function(event){
-		$('.open').removeClass('oppenned');
+		$('.side-open').removeClass('sideOpenned');
 		event.stopPropagation();
 	});
 
