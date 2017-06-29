@@ -26,44 +26,39 @@
 	</head>
 
 	<body>
-		<div id="wrapper">
 
-			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-				<button id="sidebarButton" type="button"><</button>
+		<div class="open">
+			<span class="cls"></span>
+			<span>
+				<ul class="sub-menu ">
+					<li>
+						<a href="#about" title="about">About</a>
+					</li>
+				</ul>
+			</span>
+			<span class="cls"></span>
+		</div>
 
-					<h2>ORDERING</h2>
-					<ul>
-						<li>
-							<input type="checkbox" href="#" id="all" class="button selectButton subcollectionSelect selecting" checked>
-							<label for="all">No Order</label>
-						</li>
-					</ul>
-
-			</nav>
-
-				<div class="container">
-					<div id="pagetitle">
-						<h1>Dreamworks &#8226 Visualization of a dream bank</h1>
-					</div>
-
-
-					<div id="d3">
-						<div id="vis"></div>
-					</div>
-				</div>
-
+		<div class="container" id="page-content-wrapper">
+			<div id="pagetitle">
+				<h1>Dreamworks &#8226 Visualization of a dream bank</h1>
 			</div>
 
-			<footer class="footer">
-				<div class="container">
-					<p>Hi ! This is the footer !</p>
-					<p><a href="http://www.dreambank.net/">Dream Bank</a></p>
-				</div>
-			</footer>
+			<div id="d3">
+				<div id="vis"></div>
+			</div>
+		</div>
 
-			<!-- Page scripts -->
-			<script src="js/index.js"></script>
-			<script src="js/tooltip.js"></script>
-			<script src="js/bubble_chart.js"></script>
+		<footer class="footer">
+			<div class="container">
+				<p>Hi ! This is the footer !</p>
+				<p><a href="http://www.dreambank.net/">Dream Bank</a></p>
+			</div>
+		</footer>
+
+		<!-- Page scripts -->
+		<script src="js/index.js"></script>
+		<script src="js/tooltip.js"></script>
+		<script src="js/bubble_chart.js"></script>
 	</body>
 </html>

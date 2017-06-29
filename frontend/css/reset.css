@@ -3,7 +3,6 @@
  */
 
 
-body, button, input, select, textarea { font-family: sans-serif; color: #fff; }
-body { margin: 0; font-size: 13px; line-height: 1.231; background-image: url(../data/images/background.png); }
+body, button, input, select, textarea { font-family: sans-serif; color: #fff; } 
 img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
 svg:not(:root) { overflow: hidden; }
