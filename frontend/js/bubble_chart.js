@@ -566,7 +566,13 @@ d3.csv('data.csv', display);
 setupButtons();
 
 $(document).ready(function(){
-  $("#d3").append("<button id="+"AN_pot"+">Anger</button>");
+  var height = $("#d3").height();
+  var width = $("#d3").width();
+
+  var z = $("#d3");
+
+  $("#l_col").append("<button id="+"AN_pot"+">Anger</button>");
   $("#AN_pot").attr("class", "potatoes");
-  $("#AN_pot").attr("style", "left:200px");
+  $("#AN_pot").attr("style", "background: #BF1238;");
+  //$("#AN_pot").attr("style", "left:200px");
 });

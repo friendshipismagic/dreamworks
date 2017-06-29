@@ -49,6 +49,9 @@ h1, h2 {
 
 #d3 {
     position: absolute;
+    display: grid;
+    grid-template-columns: 15% 70% 15%;
+    grid-auto-rows: 100%;
 }
 
 #sidebarButton {
@@ -60,12 +63,15 @@ h1, h2 {
 }
 
 .potatoes {
-    height: 100px;
-    width: 170px;
+    width: 15%;
+    height: 10%;
     border-radius: 100%;
     border: 1px solid #000;
     -ms-transform: rotate(7deg); /* IE 9 */
     -webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
     transform: rotate(300deg);
     position: absolute;
+    font-size: 150%;
+    text-transform: uppercase;
+    color: #ffffff;
 }
