@@ -11,6 +11,15 @@ h1, h2 {
 	text-align: center;
 }
 
+label {
+  color: #EFEFEF;
+}
+
+p.left {
+  margin-left:-50px;
+  line-height: 1px;
+}
+
 #wrapper {
     padding-left: 250px;
     -webkit-transition: all 0.5s ease;
@@ -27,7 +36,7 @@ h1, h2 {
     z-index: 1000;
     position: fixed;
     left: 250px;
-    width: 250px;
+    width: 300px;
     height: 90%;
     margin-left: -250px;
     overflow-y: scroll;
@@ -58,4 +67,3 @@ h1, h2 {
     background: #FAFAFF;
     border: none;
 }
-
