@@ -565,11 +565,31 @@ d3.csv('data.csv', display);
 // setup the buttons.
 setupButtons();
 
-$(document).ready(function(){
-  var height = $("#d3").height();
-  var width = $("#d3").width();
+// The part for the emotion bubbles
+var AN_click = 0;
+var AP_click = 0;
+var SD_click = 0;
+var CO_click = 0;
+var HA_click = 0;
 
-  var z = $("#d3");
+var an, ap, sd, co, ha;
+an = document.getElementById('AN_pot');
+ap = document.getElementById('AP_pot');
+sd = document.getElementById('SD_pot');
+co = document.getElementById('CO_pot');
+ha = document.getElementById('HA_pot');
+
+function AN_clicked(){
+  if(AN_click == 0){
+    an.style.color = "#000";
+    var bub;
+    //TODO : get the appropriate bubbles here, in the var bubbles
+
+  }else{
+    an.style.color = "#ffffff";
+  }
+  AN_click = 1 - AN_click;
+}
 
 //the potatoe for the emotion "anger"
   /*$("#AN_pot").attr("style", "background: #BF1238; border: 2px solid #9C0F2E;"+
@@ -592,4 +612,3 @@ $(document).ready(function(){
   /*$("#HA_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
   "-ms-transform: rotate(255deg); -webkit-transform: rotate(255deg); transform: rotate(255deg);"+
   "top:75%;");*/
-});

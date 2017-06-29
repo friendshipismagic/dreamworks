@@ -68,7 +68,7 @@ h1, h2 {
     border-radius: 100%;
     border: 1px solid #000;
     position: absolute;
-    font-size: 150%;
+    font-size: 100%;
     text-transform: uppercase;
     color: #ffffff;
 }
@@ -78,7 +78,7 @@ h1, h2 {
   border: 2px solid #9C0F2E;
   -ms-transform: rotate(300deg);
   -webkit-transform: rotate(300deg);
-  transform: rotate(300deg);"+
+  transform: rotate(300deg);
   top:20%;
   left:5%;
 }
@@ -100,18 +100,18 @@ h1, h2 {
   left:5%;
 }
 #CO_pot {
-  background: #17268A;
-  border: 2px solid #131F70;
+  background: #D65109;
+  border: 2px solid #B84608;
   -ms-transform: rotate(60deg);
   -webkit-transform: rotate(60deg);
   transform: rotate(60deg);
   top:25%;
 }
 #HA_pot {
-  background: #17268A;
-  border: 2px solid #131F70;
-  -ms-transform: rotate(255deg);
-  -webkit-transform: rotate(255deg);
-  transform: rotate(255deg);
+  background: #EDA800;
+  border: 2px solid #FFB500;
+  -ms-transform: rotate(130deg);
+  -webkit-transform: rotate(130deg);
+  transform: rotate(130deg);
   top:75%;
 }
