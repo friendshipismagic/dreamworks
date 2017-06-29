@@ -17,6 +17,7 @@
 
 // State of the view: grouped view, or ordered by years
 var currentView;
+var subcollectionsNumber = 17;
 
 function bubbleChart() {
 
@@ -33,6 +34,7 @@ function bubbleChart() {
   var groupedView = "all";
   var yearOrderedView = "year";
   var genderOrderedView = "gender";
+  var subcollectionOrderedView = "subcollection";
 
   // Locations to move bubbles towards, in grouped view mode.
   var center = { x: width / 2, y: height / 2 };
@@ -268,6 +270,21 @@ function bubbleChart() {
   }
 
   /*
+   * Sets visualization in "split by gender mode".
+   * The force layout tick function is set to move nodes to the
+   * genderCenter of their dreamers gender.
+   */
+  function splitBubblesSubcollection() {
+    force.on('tick', function (e) {
+      bubbles.each(moveToSubcollection(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  /*
    * Helper function for "split by year mode".
    * Returns a function that takes the data for a
    * single node and adjusts the position values
@@ -287,7 +304,8 @@ function bubbleChart() {
       var yeard = +d.date.substring(0, 4);
       // Custom function fitted to the view
       // 1890 and 2020 are rough extrema for the years range of our data
-      // 230 and 4/9 are ad hoc parameters
+      // 230 is the left margin
+      // 4/9 is an ad hoc parameter for the view to fit the screen
       var targetX = 230 + (yeard-1890)/(2020-1890) * width * 4/9;
       var targetY = height/2;
 
@@ -315,13 +333,54 @@ function bubbleChart() {
     return function (d) {
       var gender = d.gender;
       // Custom function fitted to the view
-      // 1890 and 2020 are rough extrema for the years range of our data
-      // 230 and 4/9 are ad hoc parameters
       var targetX = width/3;
       if (gender == "male")
           targetX = width*2/3;
       var targetY = height/2;
 
+      d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
+    };
+  }
+
+  /*
+   * Helper function for "split by subcollection mode".
+   * Returns a function that takes the data for a
+   * single node and adjusts the position values
+   * of that node to move it the subcollection center for that
+   * node.
+   *
+   * Positioning is adjusted by the force layout's
+   * alpha parameter which gets smaller and smaller as
+   * the force layout runs. This makes the impact of
+   * this moving get reduced as each node gets closer to
+   * its destination, and so allows other forces like the
+   * node's charge force to also impact final location.
+   */
+
+  function moveToSubcollection(alpha) {
+    return function (d) {
+      var subcollection = d.dataset;
+      // Custom function fitted to the view
+      var targetX = 320;
+      var targetY = height/2;
+      var button;
+      var breakLoop = false;
+
+      var subcollections = d3.select('#sidemenu')
+        .selectAll('.subcollectionSelect');
+      for (var i = 0; i <= subcollections[0].length - 1; i++) {
+        button = d3.select(subcollections[0][i]);
+        if(subcollection == button.attr('id'))
+        {
+          breakLoop = true;
+          // Custom function fitted to the view
+          // 320 is the left margin in pixels
+          // 1/3 is an ad hoc parameter so the view fits the screen
+          targetX = 320 + width*i/subcollectionsNumber * 1/3;
+        }
+        if (breakLoop) break;
+      }
       d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
       d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
     };
@@ -366,15 +425,14 @@ function bubbleChart() {
    * displayName is expected to be a string and either 'year' or 'all'.
    */
   chart.toggleDisplay = function (displayName) {
-    if (displayName === yearOrderedView) {
+    if (displayName === yearOrderedView)
       splitBubblesYears();
-    } else {
-      if (displayName === genderOrderedView) {
-        splitBubblesGender();
-      } else {
-        groupBubbles();
-      }
-    }
+    else if (displayName === genderOrderedView)
+      splitBubblesGender();
+    else if (displayName === subcollectionOrderedView)
+      splitBubblesSubcollection();
+    else
+      groupBubbles();
   };
 
   /*
@@ -389,8 +447,10 @@ function bubbleChart() {
 
     if(currentView == yearOrderedView)
       splitBubblesYears();
-    if(currentView == genderOrderedView)
+    else if (currentView == genderOrderedView)
       splitBubblesGender();
+    else if (currentView == subcollectionOrderedView)
+      splitBubblesSubcollection();
     else
       groupBubbles();
   };
@@ -445,7 +505,7 @@ function setupButtons() {
       myBubbleChart.toggleDisplay(buttonId);
     });
 
-    // Allow for selecting dreams
+    // Select dreams
     d3.select('#sidemenu')
     .selectAll('.selectButton')
     .on('click', function () {
