@@ -49,6 +49,9 @@ h1, h2 {
 
 #d3 {
     position: absolute;
+    display: grid;
+    grid-template-columns: 10% 70% 20%;
+    grid-auto-rows: 100%;
 }
 
 #sidebarButton {
@@ -59,3 +62,56 @@ h1, h2 {
     border: none;
 }
 
+.potatoes {
+    width: 15%;
+    height: 10%;
+    border-radius: 100%;
+    border: 1px solid #000;
+    position: absolute;
+    font-size: 100%;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+#AN_pot {
+  background: #BF1238;
+  border: 2px solid #9C0F2E;
+  -ms-transform: rotate(300deg);
+  -webkit-transform: rotate(300deg);
+  transform: rotate(300deg);
+  top:20%;
+  left:5%;
+}
+#AP_pot {
+  background: #8E09D6;
+  border: 2px solid #7D08BD;
+  -ms-transform: rotate(270deg);
+  -webkit-transform: rotate(270deg);
+  transform: rotate(270deg);
+  top:50%;
+}
+#SD_pot {
+  background: #17268A;
+  border: 2px solid #131F70;
+  -ms-transform: rotate(240deg);
+  -webkit-transform: rotate(240deg);
+  transform: rotate(240deg);
+  top:80%;
+  left:5%;
+}
+#CO_pot {
+  background: #D65109;
+  border: 2px solid #B84608;
+  -ms-transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+  transform: rotate(60deg);
+  top:25%;
+}
+#HA_pot {
+  background: #EDA800;
+  border: 2px solid #FFB500;
+  -ms-transform: rotate(130deg);
+  -webkit-transform: rotate(130deg);
+  transform: rotate(130deg);
+  top:75%;
+}

@@ -99,7 +99,7 @@ function bubbleChart() {
     var dateRange = d3.select('#yearMin').node().value;
     dreamYear = +dreamData.date.substring(0, 4);
     if(dreamYear<dateRange) resultRadius = smallRadius;
-        
+
     dateRange = d3.select('#yearMax').node().value;
     if(dreamYear>dateRange) resultRadius = smallRadius;
 
@@ -564,3 +564,86 @@ d3.csv('data.csv', display);
 
 // setup the buttons.
 setupButtons();
+
+//JS associated with the potatoes
+/*var AN_click = 0;
+var AP_click = 0;
+var SD_click = 0;
+var CO_click = 0;
+var HA_click = 0;*/
+
+var an, ap, sd, co, ha;
+an = document.getElementById('AN_pot');
+ap = document.getElementById('AP_pot');
+sd = document.getElementById('SD_pot');
+co = document.getElementById('CO_pot');
+ha = document.getElementById('HA_pot');
+
+function AN_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the angry dreams
+    bubbles.each()
+          .attr('stroke', "#BF1238")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function AP_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the anxious dreams
+    bubbles.each()
+          .attr('stroke', "#8E09D6")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function SD_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the sad dreams
+    bubbles.each()
+          .attr('stroke', "#17268A")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function CO_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the confused dreams
+    bubbles.each()
+          .attr('stroke', "#D65109")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function HA_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the happy dreams
+    bubbles.each()
+          .attr('stroke', "#EDA800")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function clearAllBubbleStyles(){
+  an.style.color = "#ffffff";
+  ap.style.color = "#ffffff";
+  sd.style.color = "#ffffff";
+  co.style.color = "#ffffff";
+  ha.style.color = "#ffffff";
+
+  chart.selectNodes = function () {
+    bubbles.each(resizeBubble())
+          .attr('stroke', function (d) { return d3.rgb(fillColor('medium')).darker(); })
+          .attr('stroke-width', 2);
+  };
+}

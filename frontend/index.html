@@ -41,7 +41,7 @@
 						<tr><th><a href="#" id="gender" class="button orderButton">Order by gender</a></th></tr>
 						<tr><th><a href="#" id="subcollection" class="button orderButton">Order by subcollection</a></th></tr>
 					</table>
-					
+
 					<h2>SELECT</h2>
 					<h3>Gender</h3>
 					<table>
@@ -75,11 +75,20 @@
 						<tr><th><input type="range" min="1880" max="2017" value="1880" id="yearMin" class="inputRange"></th></tr>
 						<tr><th><input type="range" min="1880" max="2017" value="2017" id="yearMax" class="inputRange"></th></tr>
 					</table>
-					
+
 				</div>
 
 				<div id="d3">
+					<div id="l_col">
+						<button id="AN_pot" class="potatoes" onclick="AN_clicked()">Anger</button>
+						<button id="AP_pot" class="potatoes" onclick="AP_clicked()">Anxiety</button>
+						<button id="SD_pot" class="potatoes" onclick="SD_clicked()">Sadness</button>
+					</div>
 					<div id="vis"></div>
+					<div id="r_col">
+						<button id="CO_pot" class="potatoes" onclick="CO_clicked()">Confusion</button>
+						<button id="HA_pot" class="potatoes" onclick="HA_clicked()">Positive emotions</button>
+					</div>
 				</div>
 			</div>
 
