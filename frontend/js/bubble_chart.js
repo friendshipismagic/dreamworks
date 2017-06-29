@@ -565,12 +565,12 @@ d3.csv('data.csv', display);
 // setup the buttons.
 setupButtons();
 
-// The part for the emotion bubbles
-var AN_click = 0;
+//JS associated with the potatoes
+/*var AN_click = 0;
 var AP_click = 0;
 var SD_click = 0;
 var CO_click = 0;
-var HA_click = 0;
+var HA_click = 0;*/
 
 var an, ap, sd, co, ha;
 an = document.getElementById('AN_pot');
@@ -580,35 +580,70 @@ co = document.getElementById('CO_pot');
 ha = document.getElementById('HA_pot');
 
 function AN_clicked(){
-  if(AN_click == 0){
-    an.style.color = "#000";
-    var bub;
-    //TODO : get the appropriate bubbles here, in the var bubbles
-
-  }else{
-    an.style.color = "#ffffff";
-  }
-  AN_click = 1 - AN_click;
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the angry dreams
+    bubbles.each()
+          .attr('stroke', "#BF1238")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
 }
 
-//the potatoe for the emotion "anger"
-  /*$("#AN_pot").attr("style", "background: #BF1238; border: 2px solid #9C0F2E;"+
-  "-ms-transform: rotate(300deg); -webkit-transform: rotate(300deg); transform: rotate(300deg);"+
-  "top:20%; left:5%");*/
-//the potatoe for the emotion "anxiety"
-  /*$("#AP_pot").attr("style", "background: #8E09D6; border: 2px solid #7D08BD;"+
-  "-ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); transform: rotate(270deg);"+
-  "top:50%;");*/
-//the potatoe for the emotion "sadness"
-  /*$("#SD_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
-  "-ms-transform: rotate(240deg); -webkit-transform: rotate(240deg); transform: rotate(240deg);"+
-  "top:80%; left:5%");*/
+function AP_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the anxious dreams
+    bubbles.each()
+          .attr('stroke', "#8E09D6")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
 
-//the potatoe for the emotion "confusion"
-  /*$("#CO_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
-  "-ms-transform: rotate(60deg); -webkit-transform: rotate(60deg); transform: rotate(60deg);"+
-  "top:25%;");*/
-//the potatoe for the emotion "positive emotions"
-  /*$("#HA_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
-  "-ms-transform: rotate(255deg); -webkit-transform: rotate(255deg); transform: rotate(255deg);"+
-  "top:75%;");*/
+function SD_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the sad dreams
+    bubbles.each()
+          .attr('stroke', "#17268A")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function CO_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the confused dreams
+    bubbles.each()
+          .attr('stroke', "#D65109")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function HA_clicked(){
+  clearAllBubbleStyles();
+  chart.selectNodes = function () {
+// TODO: select only the happy dreams
+    bubbles.each()
+          .attr('stroke', "#EDA800")
+          .attr('stroke-width', 1);
+  };
+  an.style.color = "#000";
+}
+
+function clearAllBubbleStyles(){
+  an.style.color = "#ffffff";
+  ap.style.color = "#ffffff";
+  sd.style.color = "#ffffff";
+  co.style.color = "#ffffff";
+  ha.style.color = "#ffffff";
+
+  chart.selectNodes = function () {
+    bubbles.each(resizeBubble())
+          .attr('stroke', function (d) { return d3.rgb(fillColor('medium')).darker(); })
+          .attr('stroke-width', 2);
+  };
+}
