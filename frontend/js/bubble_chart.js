@@ -571,8 +571,35 @@ $(document).ready(function(){
 
   var z = $("#d3");
 
+//the potatoe for the emotion "anger"
   $("#l_col").append("<button id="+"AN_pot"+">Anger</button>");
   $("#AN_pot").attr("class", "potatoes");
-  $("#AN_pot").attr("style", "background: #BF1238;");
-  //$("#AN_pot").attr("style", "left:200px");
+  $("#AN_pot").attr("style", "background: #BF1238; border: 2px solid #9C0F2E;"+
+  "-ms-transform: rotate(300deg); -webkit-transform: rotate(300deg); transform: rotate(300deg);"+
+  "top:20%; left:5%");
+//the potatoe for the emotion "anxiety"
+  $("#l_col").append("<button id="+"AP_pot"+">Anxiety</button>");
+  $("#AP_pot").attr("class", "potatoes");
+  $("#AP_pot").attr("style", "background: #8E09D6; border: 2px solid #7D08BD;"+
+  "-ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); transform: rotate(270deg);"+
+  "top:50%;");
+//the potatoe for the emotion "sadness"
+  $("#l_col").append("<button id="+"SD_pot"+">Sadness</button>");
+  $("#SD_pot").attr("class", "potatoes");
+  $("#SD_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
+  "-ms-transform: rotate(240deg); -webkit-transform: rotate(240deg); transform: rotate(240deg);"+
+  "top:80%; left:5%");
+
+//the potatoe for the emotion "confusion"
+  $("#r_col").append("<button id="+"CO_pot"+">Sadness</button>");
+  $("#CO_pot").attr("class", "potatoes");
+  $("#CO_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
+  "-ms-transform: rotate(60deg); -webkit-transform: rotate(60deg); transform: rotate(60deg);"+
+  "top:25%;");
+//the potatoe for the emotion "positive emotions"
+  $("#r_col").append("<button id="+"HA_pot"+">Positive emotions</button>");
+  $("#HA_pot").attr("class", "potatoes");
+  $("#HA_pot").attr("style", "background: #17268A; border: 2px solid #131F70;"+
+  "-ms-transform: rotate(255deg); -webkit-transform: rotate(255deg); transform: rotate(255deg);"+
+  "top:75%;");
 });
