@@ -59,3 +59,13 @@ h1, h2 {
     border: none;
 }
 
+.potatoes {
+    height: 100px;
+    width: 170px;
+    border-radius: 100%;
+    border: 1px solid #000;
+    -ms-transform: rotate(7deg); /* IE 9 */
+    -webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
+    transform: rotate(300deg);
+    position: absolute;
+}

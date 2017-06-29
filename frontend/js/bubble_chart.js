@@ -99,7 +99,7 @@ function bubbleChart() {
     var dateRange = d3.select('#yearMin').node().value;
     dreamYear = +dreamData.date.substring(0, 4);
     if(dreamYear<dateRange) resultRadius = smallRadius;
-        
+
     dateRange = d3.select('#yearMax').node().value;
     if(dreamYear>dateRange) resultRadius = smallRadius;
 
@@ -564,3 +564,9 @@ d3.csv('data.csv', display);
 
 // setup the buttons.
 setupButtons();
+
+$(document).ready(function(){
+  $("#d3").append("<button id="+"AN_pot"+">Anger</button>");
+  $("#AN_pot").attr("class", "potatoes");
+  $("#AN_pot").attr("style", "left:200px");
+});
