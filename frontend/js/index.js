@@ -15,7 +15,12 @@ $(document).ready(function() {
 		event.stopPropagation();
 	});
 
-	$('#ex1').slider({
+	$('#yearRange').slider({
+		id: "yearRange",
+		min: 1880,
+		max: 2017,
+		range: true,
+		value: [1900, 1980],
 		formatter: function(value) {
 			return 'Current value: ' + value;
 		}
