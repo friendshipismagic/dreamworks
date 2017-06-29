@@ -21,6 +21,7 @@ $(document).ready(function() {
 		max: 2017,
 		range: true,
 		value: [1900, 1980],
+		tooltip: 'always',
 		formatter: function(value) {
 			return 'Current value: ' + value;
 		}
