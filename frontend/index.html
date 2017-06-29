@@ -26,76 +26,44 @@
 	</head>
 
 	<body>
-		<div class="container">
-			<div id="pagetitle">
-				<h1>Dreamworks &#8226 Visualization of a dream bank</h1>
-			</div>
+		<div id="wrapper">
 
-			<div id="wrapper">
-				<div id="sidemenu">
-					<button id="sidebarButton" type="button"><</button>
-					<table>
-						<h2>ORDERING</h2>
-						<p class="left"><input type="checkbox" href="#" id="all" class="button selectButton subcollectionSelect selecting" checked><label for="all">No Order</label></p>
-						<p class="left"><input type="checkbox" href="#" id="year" class="button selectButton subcollectionSelect selecting" checked><label for="year">Order by Year</label></p>
-						<p class="left"><input type="checkbox" href="#" id="gender" class="button selectButton subcollectionSelect selecting" checked><label for="gender">Order by Gender</label></p>
-						<p class="left"><input type="checkbox" href="#" id="subcollection" class="button selectButton subcollectionSelect selecting" checked><label for="subcollection">Order by Subcollection</label></p>
-					</table>
+			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				<button id="sidebarButton" type="button"><</button>
 
-					<h2>SELECTING</h2>
-					<h3>Gender</h3>
-					<table>
-						<p class="left"><input type="checkbox" href="#" id="male" class="button selectButton subcollectionSelect selecting" checked><label for="male">Male</label></p>
-						<p class="left"><input type="checkbox" href="#" id="female" class="button selectButton subcollectionSelect selecting" checked><label for="female">Female</label></p>
-					</table>
+					<h2>ORDERING</h2>
+					<ul>
+						<li>
+							<input type="checkbox" href="#" id="all" class="button selectButton subcollectionSelect selecting" checked>
+							<label for="all">No Order</label>
+						</li>
+					</ul>
 
-					<h3>Dream Set</h3>
+			</nav>
 
-						<p class="left"><input type="checkbox" href="#" id="angie" class="button selectButton subcollectionSelect selecting" checked><label for="angie">A 18/20 year old Female</label></p>
-						<p class="left"><input type="checkbox" href="#" id="bea2" class="button selectButton subcollectionSelect selecting" checked><label for="bea2">A College Student</label></p>
-						<p class="left"><input type="checkbox" href="#" id="chris" class="button selectButton subcollectionSelect selecting" checked><label for="chris">A Transvestite</label></p>
-						<p class="left"><input type="checkbox" href="#" id="chuck" class="button selectButton subcollectionSelect selecting" checked><label for="chuck">A Physical Scientist</label></p>
-						<p class="left"><input type="checkbox" href="#" id="edna" class="button selectButton subcollectionSelect selecting" checked><label for="edna">A Blind Woman</label></p></p>
-						<p class="left"><input type="checkbox" href="#" id="emmas_husband" class="button selectButton subcollectionSelect selecting" checked><label for="emmas_husband">Emma's Husband</label></p>
-						<p class="left"><input type="checkbox" href="#" id="jasmine1" class="button selectButton subcollectionSelect selecting" checked><label for="jasmine1">Middle School</label></p>
-						<p class="left"><input type="checkbox" href="#" id="jeff" class="button selectButton subcollectionSelect selecting" checked><label for="jeff">A Lucid Dreamer</label></p>
-						<p class="left"><input type="checkbox" href="#" id="mark" class="button selectButton subcollectionSelect selecting" checked><label for="mark">A Young Boy</label></p>
-						<p class="left"><input type="checkbox" href="#" id="midwest_teens-f" class="button selectButton subcollectionSelect selecting" checked><label for="midwest_teens-f">Midwest teenagers (F)</label></p>
-						<p class="left"><input type="checkbox" href="#" id="midwest_teens-m" class="button selectButton subcollectionSelect selecting" checked><label for="midwest_teens-m">Midwest teenagers (M)</label></p>
-						<p class="left"><input type="checkbox" href="#" id="phil1" class="button selectButton subcollectionSelect selecting" checked><label for="phil1">Teens</label></p>
-						<p class="left"><input type="checkbox" href="#" id="physiologist" class="button selectButton subcollectionSelect selecting" checked><label for="physiologist">A Physiologist</label></p>
-						<p class="left"><input type="checkbox" href="#" id="ringo" class="button selectButton subcollectionSelect selecting" checked><label for="ringo">From the 1960s</label></p>
-						<p class="left"><input type="checkbox" href="#" id="vickie" class="button selectButton subcollectionSelect selecting" checked><label for="vickie">A 10 year old Girl</label></p>
-						<p class="left"><input type="checkbox" href="#" id="vietnam_vet" class="button selectButton subcollectionSelect selecting" checked><label for="vietnam_vet">A Vietnam Veteran</label></p>
-						<p class="left"><input type="checkbox" href="#" id="wedding" class="button selectButton subcollectionSelect selecting" checked><label for="wedding">Wedding Dreams</label></p>
+				<div class="container">
+					<div id="pagetitle">
+						<h1>Dreamworks &#8226 Visualization of a dream bank</h1>
+					</div>
 
 
-					<h3>Dream dates</h3>
-					<table>
-
-						<tr><th><input type="range" min="1880" max="2017" value="1880" id="yearMin" class="inputRange"></th></tr>
-						<tr><th><input type="range" min="1880" max="2017" value="2017" id="yearMax" class="inputRange"></th></tr>
-					</table>
-
+					<div id="d3">
+						<div id="vis"></div>
+					</div>
 				</div>
 
-				<div id="d3">
-					<div id="vis"></div>
+			</div>
+
+			<footer class="footer">
+				<div class="container">
+					<p>Hi ! This is the footer !</p>
+					<p><a href="http://www.dreambank.net/">Dream Bank</a></p>
 				</div>
-			</div>
+			</footer>
 
-		</div>
-
-		<footer class="footer">
-			<div class="container">
-				<p>Hi ! This is the footer !</p>
-				<p><a href="http://www.dreambank.net/">Dream Bank</a></p>
-			</div>
-		</footer>
-
-		<!-- Page scripts -->
-		<script src="js/index.js"></script>
-		<script src="js/tooltip.js"></script>
-		<script src="js/bubble_chart.js"></script>
+			<!-- Page scripts -->
+			<script src="js/index.js"></script>
+			<script src="js/tooltip.js"></script>
+			<script src="js/bubble_chart.js"></script>
 	</body>
 </html>
