@@ -1,5 +1,5 @@
-a, a:visited, a:active {
-  color: #000;
+a {
+  color: #FFF;
 }
 
 .container {
@@ -17,7 +17,7 @@ a, a:visited, a:active {
   text-decoration: none ;
 }
 
-.button.active {
+a:active, .button.active {
   background: #000;
   color: #5894E3;
 }

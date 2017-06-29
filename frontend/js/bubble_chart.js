@@ -13,56 +13,34 @@
  * https://bost.ocks.org/mike/chart/
  *
  */
+
+
+// State of the view: grouped view, or ordered by years
+var currentView;
+var subcollectionsNumber = 17;
+
 function bubbleChart() {
-  //Test de l'arc
-/*
-  var canvas = d3.select("body")
-    .append("svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight);
-
-  var r= Math.min(window.innerWidth/3, window.innerHeight/3);
-  var p=Math.PI*2;
-  var group= canvas.append("g")
-    .attr("transform", "translate(500,80)");
-
-  var arc = d3.svg.arc()
-    .innerRadius(r-2)
-    .outerRadius(r)
-    .startAngle(2/p-1.5)
-    .endAngle(p-2/p-1.5);
-
-  group.append("path")
-    .attr("d",arc);
-*/
-
 
   // Constants for sizing
   var width = 940;
   var height = 600;
+  var smallRadius = 2;
+  var mediumRadius = 8;
 
-  // tooltip for mouseover functionality
+  // Tooltip for mouseover functionality
   var tooltip = floatingTooltip('gates_tooltip', 240);
 
-  // Locations to move bubbles towards, depending on which view mode is selected.
+  // View mode
+  var groupedView = "all";
+  var yearOrderedView = "year";
+  var genderOrderedView = "gender";
+  var subcollectionOrderedView = "subcollection";
+
+  // Locations to move bubbles towards, in grouped view mode.
   var center = { x: width / 2, y: height / 2 };
 
-  var yearCenters = {
-    2008: { x: width / 3, y: height / 2 },
-    2009: { x: width / 2, y: height / 2 },
-    2010: { x: 2 * width / 3, y: height / 2 }
-  };
-
-  // X locations of the year titles.
-  var yearsTitleX = {
-    2008: 160,
-    2009: width / 2,
-    2010: width - 160
-  };
-
   // Used when setting up force and moving around nodes
-  var damper = 0.102;   /////////////////////////////PERMET DE SÉLÉCTIONNER LA PROXIMITÉ DES BUBBLES
-  /////// ET LA RAPIDITÉ DE CONVERGENCE
+  var damper = 0.102;
 
   // These will be set in create_nodes and create_vis
   var svg = null;
@@ -79,7 +57,7 @@ function bubbleChart() {
   dimensions.
   */
   function charge(d) {
-    return -Math.pow(d.radius, 2.0) / 8; ///////////JOUER SUR LE DÉNOMINATEUR POUR LA RÉPULSION DES BUBBLES
+    return -Math.pow(d.radius, 2.0) / 8;
   }
 
   /*Here we create a force layout and configure it to use the charge function
@@ -99,10 +77,42 @@ function bubbleChart() {
     .domain(['low', 'medium', 'high'])
     .range(['#F2CC0C', '#2238CC', '#5894E3']);
 
-  // Sizes bubbles based on their area instead of raw radius
-  var radiusScale = d3.scale.pow()
-    .exponent(0.5)
-    .range([2, 85]);
+  // Sizes bubbles based on their selected status
+  function radiusScale(d){
+    var dreamData = d;
+    var resultRadius = mediumRadius;
+    var currentButton;
+    // Verify that the gender and dataset are selected
+    var buttons = d3.selectAll('.selectButton')
+        .each(function(d) {
+            currentButton = d3.select(this);
+            if (!currentButton.classed("selecting")){
+              var buttonID = currentButton.attr('id');
+              if (dreamData.gender == buttonID || dreamData.dataset == buttonID){
+                resultRadius = smallRadius;
+              }
+            }
+         });
+    // Verify that the age and date are within the range
+    //TODO: put one input only to set the range so that the max is not onferior to the min
+
+    var dateRange = d3.select('#yearMin').node().value;
+    dreamYear = +dreamData.date.substring(0, 4);
+    if(dreamYear<dateRange) resultRadius = smallRadius;
+        
+    dateRange = d3.select('#yearMax').node().value;
+    if(dreamYear>dateRange) resultRadius = smallRadius;
+
+    return resultRadius;
+  }
+
+  // Resize a bubble according to selectors
+  function resizeBubble() {
+    return function (d) {
+      d.radius = radiusScale(d);
+    };
+  }
+
 
   /*
    * This data manipulation function takes the raw data from
@@ -123,20 +133,19 @@ function bubbleChart() {
     */
     var myNodes = rawData.map(function (d) {
       return {
-        id: d.id,
-        radius: radiusScale(+d.total_amount),
-        value: d.total_amount,
-        name: d.grant_title,
-        org: d.organization,
-        group: d.group,
-        year: d.start_year,
+        radius: mediumRadius,
+        text: d.text,
+        date: d.date,
+        gender: d.gender,
+        dataset: d.dataset,
+        title: d.title,
         x: Math.random() * 900,
         y: Math.random() * 800
       };
     });
 
     // sort them to prevent occlusion of smaller nodes.
-    myNodes.sort(function (a, b) { return b.value - a.value; });
+    myNodes.sort(function (a, b) { return b.radius - a.radius; });
 
     return myNodes;
   }
@@ -149,18 +158,12 @@ function bubbleChart() {
    *
    * selector is expected to be a DOM element or CSS selector that
    * points to the parent element of the bubble chart. Inside this
-   * element, the code will add the SVG continer for the visualization.
+   * element, the code will add the SVG container for the visualization.
    *
    * rawData is expected to be an array of data objects as provided by
    * a d3 loading function like d3.csv.
    */
   var chart = function chart(selector, rawData) {
-    /*Use the max total_amount in the data as the max in the scale's domain
-    note we have to ensure the total_amount is a number by converting it
-    with `+`.
-    */
-    var maxAmount = d3.max(rawData, function (d) { return +d.total_amount; });
-    radiusScale.domain([0, maxAmount]);
 
     nodes = createNodes(rawData);
     // Set the force's nodes to our newly created nodes array.
@@ -174,7 +177,7 @@ function bubbleChart() {
 
     // Bind nodes data to what will become DOM elements to represent them.
     bubbles = svg.selectAll('.bubble')
-      .data(nodes, function (d) { return d.id; });
+      .data(nodes);
 
     /*Create new circle elements each with class `bubble`.
     There will be one circle.bubble for each object in the nodes array.
@@ -183,8 +186,8 @@ function bubbleChart() {
     bubbles.enter().append('circle')
       .classed('bubble', true)
       .attr('r', 0)
-      .attr('fill', function (d) { return fillColor(d.group); })
-      .attr('stroke', function (d) { return d3.rgb(fillColor(d.group)).darker(); })
+      .attr('fill', function (d) { return fillColor('medium'); })
+      .attr('stroke', function (d) { return d3.rgb(fillColor('medium')).darker(); })
       .attr('stroke-width', 2)
       .on('mouseover', showDetail)
       .on('mouseout', hideDetail);
@@ -193,9 +196,10 @@ function bubbleChart() {
     // correct radius
     bubbles.transition()
       .duration(2000)
-      .attr('r', function (d) { return d.radius; });
+      .attr('r', function (d) { return radiusScale(d); });
 
     // Set initial layout to single group.
+    currentView = groupedView;
     groupBubbles();
   };
 
@@ -206,14 +210,11 @@ function bubbleChart() {
    * center of the visualization.
    */
   function groupBubbles() {
-    hideYears();
-
     force.on('tick', function (e) {
       bubbles.each(moveToCenter(e.alpha))
         .attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; });
     });
-
     force.start();
   }
 
@@ -240,15 +241,42 @@ function bubbleChart() {
 
   /*
    * Sets visualization in "split by year mode".
-   * The year labels are shown and the force layout
-   * tick function is set to move nodes to the
+   * The force layout tick function is set to move nodes to the
    * yearCenter of their data's year.
    */
-  function splitBubbles() {
-    showYears();
-
+  function splitBubblesYears() {
     force.on('tick', function (e) {
       bubbles.each(moveToYears(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  /*
+   * Sets visualization in "split by gender mode".
+   * The force layout tick function is set to move nodes to the
+   * genderCenter of their dreamers gender.
+   */
+  function splitBubblesGender() {
+    force.on('tick', function (e) {
+      bubbles.each(moveToGender(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  /*
+   * Sets visualization in "split by gender mode".
+   * The force layout tick function is set to move nodes to the
+   * genderCenter of their dreamers gender.
+   */
+  function splitBubblesSubcollection() {
+    force.on('tick', function (e) {
+      bubbles.each(moveToSubcollection(e.alpha))
         .attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; });
     });
@@ -270,39 +298,93 @@ function bubbleChart() {
    * its destination, and so allows other forces like the
    * node's charge force to also impact final location.
    */
+
   function moveToYears(alpha) {
     return function (d) {
-      var target = yearCenters[d.year];
-      d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
-      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
+      var yeard = +d.date.substring(0, 4);
+      // Custom function fitted to the view
+      // 1890 and 2020 are rough extrema for the years range of our data
+      // 230 is the left margin
+      // 4/9 is an ad hoc parameter for the view to fit the screen
+      var targetX = 230 + (yeard-1890)/(2020-1890) * width * 4/9;
+      var targetY = height/2;
+
+      d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
     };
   }
 
   /*
-   * Hides Year title displays.
+   * Helper function for "split by gender mode".
+   * Returns a function that takes the data for a
+   * single node and adjusts the position values
+   * of that node to move it the gender center for that
+   * node.
+   *
+   * Positioning is adjusted by the force layout's
+   * alpha parameter which gets smaller and smaller as
+   * the force layout runs. This makes the impact of
+   * this moving get reduced as each node gets closer to
+   * its destination, and so allows other forces like the
+   * node's charge force to also impact final location.
    */
-  function hideYears() {
-    svg.selectAll('.year').remove();
+
+  function moveToGender(alpha) {
+    return function (d) {
+      var gender = d.gender;
+      // Custom function fitted to the view
+      var targetX = width/3;
+      if (gender == "male")
+          targetX = width*2/3;
+      var targetY = height/2;
+
+      d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
+    };
   }
 
   /*
-   * Shows Year title displays.
+   * Helper function for "split by subcollection mode".
+   * Returns a function that takes the data for a
+   * single node and adjusts the position values
+   * of that node to move it the subcollection center for that
+   * node.
+   *
+   * Positioning is adjusted by the force layout's
+   * alpha parameter which gets smaller and smaller as
+   * the force layout runs. This makes the impact of
+   * this moving get reduced as each node gets closer to
+   * its destination, and so allows other forces like the
+   * node's charge force to also impact final location.
    */
-  function showYears() {
-    // Another way to do this would be to create
-    // the year texts once and then just hide them.
-    var yearsData = d3.keys(yearsTitleX);
-    var years = svg.selectAll('.year')
-      .data(yearsData);
 
-    years.enter().append('text')
-      .attr('class', 'year')
-      .attr('x', function (d) { return yearsTitleX[d]; })
-      .attr('y', 40)
-      .attr('text-anchor', 'middle')
-      .text(function (d) { return d; });
+  function moveToSubcollection(alpha) {
+    return function (d) {
+      var subcollection = d.dataset;
+      // Custom function fitted to the view
+      var targetX = 320;
+      var targetY = height/2;
+      var button;
+      var breakLoop = false;
+
+      var subcollections = d3.select('#sidemenu')
+        .selectAll('.subcollectionSelect');
+      for (var i = 0; i <= subcollections[0].length - 1; i++) {
+        button = d3.select(subcollections[0][i]);
+        if(subcollection == button.attr('id'))
+        {
+          breakLoop = true;
+          // Custom function fitted to the view
+          // 320 is the left margin in pixels
+          // 1/3 is an ad hoc parameter so the view fits the screen
+          targetX = 320 + width*i/subcollectionsNumber * 1/3;
+        }
+        if (breakLoop) break;
+      }
+      d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
+    };
   }
-
 
   /*
    * Function called on mouseover to display the
@@ -313,13 +395,13 @@ function bubbleChart() {
     d3.select(this).attr('stroke', 'black');
 
     var content = '<span class="name">Title: </span><span class="value">' +
-                  d.name +
+                  d.title +
                   '</span><br/>' +
-                  '<span class="name">Amount: </span><span class="value">$' +
-                  addCommas(d.value) +
+                  '<span class="name">Dataset: </span><span class="value">' +
+                  d.dataset +
                   '</span><br/>' +
-                  '<span class="name">Year: </span><span class="value">' +
-                  d.year +
+                  '<span class="name">Date: </span><span class="value">' +
+                  d.date +
                   '</span>';
     tooltip.showTooltip(content, d3.event);
   }
@@ -330,7 +412,7 @@ function bubbleChart() {
   function hideDetail(d) {
     // reset outline
     d3.select(this)
-      .attr('stroke', d3.rgb(fillColor(d.group)).darker());
+      .attr('stroke', d3.rgb(fillColor('medium')).darker());
 
     tooltip.hideTooltip();
   }
@@ -343,11 +425,34 @@ function bubbleChart() {
    * displayName is expected to be a string and either 'year' or 'all'.
    */
   chart.toggleDisplay = function (displayName) {
-    if (displayName === 'year') {
-      splitBubbles();
-    } else {
+    if (displayName === yearOrderedView)
+      splitBubblesYears();
+    else if (displayName === genderOrderedView)
+      splitBubblesGender();
+    else if (displayName === subcollectionOrderedView)
+      splitBubblesSubcollection();
+    else
       groupBubbles();
-    }
+  };
+
+  /*
+   * Externally accessible function (this is attached to the
+   * returned chart function). Allows the visualization to make unselected
+   * node categories to be less highleted
+   * categoryName is expected to be a string and either 'man', 'woman' or 'unknown'.
+   */
+  chart.selectNodes = function () {
+    bubbles.each(resizeBubble())
+          .attr('r', function (d) { return d.radius; });
+
+    if(currentView == yearOrderedView)
+      splitBubblesYears();
+    else if (currentView == genderOrderedView)
+      splitBubblesGender();
+    else if (currentView == subcollectionOrderedView)
+      splitBubblesSubcollection();
+    else
+      groupBubbles();
   };
 
 
@@ -361,7 +466,6 @@ function bubbleChart() {
  */
 
 var myBubbleChart = bubbleChart();
-
 /*
  * Function called once data is loaded from CSV.
  * Calls bubble chart function to display inside #vis div.
@@ -375,14 +479,16 @@ function display(error, data) {
 }
 
 /*
- * Sets up the layout buttons to allow for toggling between view modes.
+ * Sets up the layout buttons.
  */
 function setupButtons() {
-  d3.select('#toolbar')
-    .selectAll('.button')
+
+  //  Allow for toggling between view modes
+  d3.select('#sidemenu')
+    .selectAll('.orderButton')
     .on('click', function () {
       // Remove active class from all buttons
-      d3.selectAll('.button').classed('active', false);
+      d3.selectAll('.orderButton').classed('active', false);
       // Find the button just clicked
       var button = d3.select(this);
 
@@ -394,9 +500,47 @@ function setupButtons() {
 
       // Toggle the bubble chart based on
       // the currently clicked button.
+
+      currentView = buttonId;
       myBubbleChart.toggleDisplay(buttonId);
     });
+
+    // Select dreams
+    d3.select('#sidemenu')
+    .selectAll('.selectButton')
+    .on('click', function () {
+      // Find the button just clicked
+      var button = d3.select(this);
+
+      // Set it as an active button
+      if(button.classed('selecting')){
+        button.classed('selecting', false);
+        button.classed('active', false);
+      } else {
+        button.classed('selecting', true);
+        button.classed('active', false);
+      }
+
+      // Select or unselect the corresponding nodes
+      myBubbleChart.selectNodes();
+    });
+
+    d3.select('#yearMin')
+    .on("input", function() {
+          // Select or unselect the corresponding nodes
+            myBubbleChart.selectNodes();
+    });
+    d3.select('#yearMax')
+    .on("input", function() {
+          // Select or unselect the corresponding nodes
+            myBubbleChart.selectNodes();
+    });
 }
+
+
+/*
+ * Select only
+ */
 
 /*
  * Helper function to convert a number into a string
@@ -416,7 +560,7 @@ function addCommas(nStr) {
 }
 
 // Load the data.
-d3.csv('data/gates_money.csv', display);
+d3.csv('data.csv', display);
 
 // setup the buttons.
 setupButtons();
