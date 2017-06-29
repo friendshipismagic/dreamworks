@@ -2,6 +2,11 @@ a, a:visited, a:active {
   color: #000;
 }
 
+.rectangle {
+  position:absolute;
+  z-index: 10;
+}
+
 .container {
   max-width: 900px;
   margin: auto;
@@ -26,9 +31,10 @@ a, a:visited, a:active {
 #vis {
   width: 940px;
   height: 600px;
+  position: absolute;
   clear: both;
   margin-bottom: 10px;
-
+  z-index: 0;
 }
 
 #toolbar {
@@ -44,7 +50,6 @@ a, a:visited, a:active {
 
 .tooltip {
 	position: absolute;
-  bottom: 0;
 	top: 100px;
 	left: 100px;
   -moz-border-radius:5px;

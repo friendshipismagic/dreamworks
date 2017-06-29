@@ -4,37 +4,18 @@
 // jaune mimosa #F2CC0C
 // police #111B63
 
+var rectangle= d3.select("body")
+.append("svg")
+.append("rect")
+    .attr("x", 300).attr("y",0)
+    .attr("width", 100)
+    .attr("height", 47)
+    .attr("fill", "#3333CC");
 
-/* bubbleChart creation function. Returns a function that will
- * instantiate a new bubble chart given a DOM element to display
- * it in and a dataset to visualize.
- *
- * Organization and style inspired by:
- * https://bost.ocks.org/mike/chart/
- *
- */
+
 function bubbleChart() {
-  //Test de l'arc
-/*
-  var canvas = d3.select("body")
-    .append("svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight);
 
-  var r= Math.min(window.innerWidth/3, window.innerHeight/3);
-  var p=Math.PI*2;
-  var group= canvas.append("g")
-    .attr("transform", "translate(500,80)");
 
-  var arc = d3.svg.arc()
-    .innerRadius(r-2)
-    .outerRadius(r)
-    .startAngle(2/p-1.5)
-    .endAngle(p-2/p-1.5);
-
-  group.append("path")
-    .attr("d",arc);
-*/
 
 
   // Constants for sizing
@@ -42,7 +23,7 @@ function bubbleChart() {
   var height = 600;
 
   // tooltip for mouseover functionality
-  var tooltip = floatingTooltip('gates_tooltip', 240);
+  var tooltip = floatingTooltip('dream_tooltip', 240);
 
   // Locations to move bubbles towards, depending on which view mode is selected.
   var center = { x: width / 2, y: height / 2 };
@@ -69,24 +50,12 @@ function bubbleChart() {
   var bubbles = null;
   var nodes = [];
 
-  /*Charge function that is called for each node.
-  Charge is proportional to the diameter of the circle (which is stored in the
-  radius attribute of the circle's associated data.
-  This is done to allow for accurate collision detection with nodes of
-  different sizes.
-  Charge is negative because we want nodes to repel.
-  Dividing by 8 scales down the charge to be appropriate for the visualization
-  dimensions.
-  */
+
   function charge(d) {
     return -Math.pow(d.radius, 2.0) / 8; ///////////JOUER SUR LE DÉNOMINATEUR POUR LA RÉPULSION DES BUBBLES
   }
 
-  /*Here we create a force layout and configure it to use the charge function
-  from above. This also sets some contants to specify how the force layout should
-  behave.
-  More configuration is done below.
-  */
+
   var force = d3.layout.force()
     .size([width, height])
     .charge(charge)
@@ -94,12 +63,11 @@ function bubbleChart() {
     .friction(0.9);
 
 
-  // Nice looking colors - no reason to buck the trend
   var fillColor = d3.scale.ordinal()
     .domain(['low', 'medium', 'high'])
     .range(['#F2CC0C', '#2238CC', '#5894E3']);
 
-  // Sizes bubbles based on their area instead of raw radius
+
   var radiusScale = d3.scale.pow()
     .exponent(0.5)
     .range([2, 85]);
@@ -117,10 +85,6 @@ function bubbleChart() {
    * array for each element in the rawData input.
    */
   function createNodes(rawData) {
-    /*Use map() to convert raw data into node data.
-    Checkout http://learnjsdata.com/ for more on
-    working with data.
-    */
     var myNodes = rawData.map(function (d) {
       return {
         id: d.id,
@@ -172,6 +136,7 @@ function bubbleChart() {
       .attr('width', width)
       .attr('height', height);
 
+
     // Bind nodes data to what will become DOM elements to represent them.
     bubbles = svg.selectAll('.bubble')
       .data(nodes, function (d) { return d.id; });
@@ -187,7 +152,9 @@ function bubbleChart() {
       .attr('stroke', function (d) { return d3.rgb(fillColor(d.group)).darker(); })
       .attr('stroke-width', 2)
       .on('mouseover', showDetail)
-      .on('mouseout', hideDetail);
+      .on('mouseout', hideDetail)
+      .on('clicked', fillTextBox);
+
 
     // Fancy transition to make bubbles appear, ending with the
     // correct radius
@@ -206,6 +173,7 @@ function bubbleChart() {
    * center of the visualization.
    */
   function groupBubbles() {
+
     hideYears();
 
     force.on('tick', function (e) {
@@ -333,6 +301,22 @@ function bubbleChart() {
       .attr('stroke', d3.rgb(fillColor(d.group)).darker());
 
     tooltip.hideTooltip();
+  }
+
+  function fillTextBox(d) {
+    // change outline to indicate hover state.
+    d3.select(this).attr('stroke', 'black');
+
+    var content = '<span class="name">Title: </span><span class="value">' +
+                  d.name +
+                  '</span><br/>' +
+                  '<span class="name">Amount: </span><span class="value">$' +
+                  addCommas(d.value) +
+                  '</span><br/>' +
+                  '<span class="name">Year: </span><span class="value">' +
+                  d.year +
+                  '</span>';
+    textBox.fillTextBox(content);
   }
 
   /*
