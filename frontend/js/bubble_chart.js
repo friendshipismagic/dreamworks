@@ -32,6 +32,7 @@ function bubbleChart() {
   // View mode
   var groupedView = "all";
   var yearOrderedView = "year";
+  var genderOrderedView = "gender";
 
   // Locations to move bubbles towards, in grouped view mode.
   var center = { x: width / 2, y: height / 2 };
@@ -241,9 +242,24 @@ function bubbleChart() {
    * The force layout tick function is set to move nodes to the
    * yearCenter of their data's year.
    */
-  function splitBubbles() {
+  function splitBubblesYears() {
     force.on('tick', function (e) {
       bubbles.each(moveToYears(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  /*
+   * Sets visualization in "split by gender mode".
+   * The force layout tick function is set to move nodes to the
+   * genderCenter of their dreamers gender.
+   */
+  function splitBubblesGender() {
+    force.on('tick', function (e) {
+      bubbles.each(moveToGender(e.alpha))
         .attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; });
     });
@@ -273,6 +289,37 @@ function bubbleChart() {
       // 1890 and 2020 are rough extrema for the years range of our data
       // 230 and 4/9 are ad hoc parameters
       var targetX = 230 + (yeard-1890)/(2020-1890) * width * 4/9;
+      var targetY = height/2;
+
+      d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (targetY - d.y) * damper * alpha * 1.1;
+    };
+  }
+
+  /*
+   * Helper function for "split by gender mode".
+   * Returns a function that takes the data for a
+   * single node and adjusts the position values
+   * of that node to move it the gender center for that
+   * node.
+   *
+   * Positioning is adjusted by the force layout's
+   * alpha parameter which gets smaller and smaller as
+   * the force layout runs. This makes the impact of
+   * this moving get reduced as each node gets closer to
+   * its destination, and so allows other forces like the
+   * node's charge force to also impact final location.
+   */
+
+  function moveToGender(alpha) {
+    return function (d) {
+      var gender = d.gender;
+      // Custom function fitted to the view
+      // 1890 and 2020 are rough extrema for the years range of our data
+      // 230 and 4/9 are ad hoc parameters
+      var targetX = width/3;
+      if (gender == "male")
+          targetX = width*2/3;
       var targetY = height/2;
 
       d.x = d.x + (targetX - d.x) * damper * alpha * 1.1;
@@ -319,10 +366,14 @@ function bubbleChart() {
    * displayName is expected to be a string and either 'year' or 'all'.
    */
   chart.toggleDisplay = function (displayName) {
-    if (displayName === 'year') {
-      splitBubbles();
+    if (displayName === yearOrderedView) {
+      splitBubblesYears();
     } else {
-      groupBubbles();
+      if (displayName === genderOrderedView) {
+        splitBubblesGender();
+      } else {
+        groupBubbles();
+      }
     }
   };
 
@@ -337,7 +388,9 @@ function bubbleChart() {
           .attr('r', function (d) { return d.radius; });
 
     if(currentView == yearOrderedView)
-      splitBubbles();
+      splitBubblesYears();
+    if(currentView == genderOrderedView)
+      splitBubblesGender();
     else
       groupBubbles();
   };
