@@ -402,6 +402,9 @@ function bubbleChart() {
                   '</span><br/>' +
                   '<span class="name">Date: </span><span class="value">' +
                   d.date +
+                  '</span><br/>' +
+                  '<span class="name">Dream: </span><span class="value">' +
+                  d.text +
                   '</span>';
     tooltip.showTooltip(content, d3.event);
   }
